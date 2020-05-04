@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
 
 
 public class CharacterMovement : MonoBehaviour
@@ -44,7 +44,11 @@ public class CharacterMovement : MonoBehaviour
 
     private void Walking()
     {
-        move = Input.GetAxis("Horizontal");
+        //move = Input.GetAxis("Horizontal");
+
+        move = 0f;
+        if (Keyboard.current.aKey.isPressed) move = -1f;
+        if (Keyboard.current.dKey.isPressed) move = 1f;
 
         rb.velocity = new Vector2(move * walkingSpeed, rb.velocity.y);
 
@@ -60,7 +64,9 @@ public class CharacterMovement : MonoBehaviour
 
     private void Running()
     {
-        if(Input.GetKey(KeyCode.LeftShift) && isWalking == true)
+        //if (Input.GetKey(KeyCode.LeftShift) && isWalking == true)
+
+        if (Keyboard.current.leftShiftKey.isPressed && isWalking)
         {
             isRunning = true;
             walkingSpeed = runSpeed;
@@ -87,7 +93,8 @@ public class CharacterMovement : MonoBehaviour
 
     private void Attacking()
     {
-        if(Input.GetButtonDown("Space"))
+        //if (Input.GetButtonDown("Space"))
+        if (Keyboard.current.spaceKey.IsActuated())
         {
             isAttacking = true;
 
@@ -102,8 +109,6 @@ public class CharacterMovement : MonoBehaviour
         {
             isAttacking = false;
         }
-
-       
     }
 
     private void OnDrawGizmosSelected()
