@@ -23,7 +23,7 @@ public class CharacterMovement : MonoBehaviour
     public float attackRange;
     public LayerMask enemyLayers;
 
-
+    private PlayerControls playerControls;
 
     private Rigidbody2D rb;
     private characterGrounding characterGrounding;
@@ -33,6 +33,8 @@ public class CharacterMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         characterGrounding = GetComponent<characterGrounding>();
+        playerControls = new PlayerControls();
+        playerControls.Player.Enable();
     }
 
     private void Update()
@@ -44,11 +46,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void Walking()
     {
-        //move = Input.GetAxis("Horizontal");
-
-        move = 0f;
-        if (Keyboard.current.aKey.isPressed) move = -1f;
-        if (Keyboard.current.dKey.isPressed) move = 1f;
+        move = playerControls.Player.Move.ReadValue<Vector2>().x;
 
         rb.velocity = new Vector2(move * walkingSpeed, rb.velocity.y);
 
@@ -66,16 +64,16 @@ public class CharacterMovement : MonoBehaviour
     {
         //if (Input.GetKey(KeyCode.LeftShift) && isWalking == true)
 
-        if (Keyboard.current.leftShiftKey.isPressed && isWalking)
-        {
-            isRunning = true;
-            walkingSpeed = runSpeed;
-        }
-        else
-        {
-            isRunning = false;
-            walkingSpeed = normalSpeed;
-        }
+        //    if (Keyboard.current.leftShiftKey.isPressed && isWalking)
+        //    {
+        //        isRunning = true;
+        //        walkingSpeed = runSpeed;
+        //    }
+        //    else
+        //    {
+        //        isRunning = false;
+        //        walkingSpeed = normalSpeed;
+        //    }
     }
 
     //private void Jump()
@@ -93,8 +91,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void Attacking()
     {
-        //if (Input.GetButtonDown("Space"))
-        if (Keyboard.current.spaceKey.IsActuated())
+        if (playerControls.Player.Attack.triggered)
         {
             isAttacking = true;
 
